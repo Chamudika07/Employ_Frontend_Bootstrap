@@ -5,9 +5,6 @@ const AddEmployee = () => {
   const [lastName, setLastName] = useState('');
   const [email, setEmail] = useState('');
 
-  const handleFirstName = (e) => setFirstName(e.target.value);
-  const handleLastName = (e) => setLastName(e.target.value);
-  const handleEmail = (e) => setEmail(e.target.value);
 
   const saveEmployee = (e) => {
     e.preventDefault(); 
@@ -33,7 +30,7 @@ const AddEmployee = () => {
                 placeholder="Enter First Name"
                 name="firstName"
                 value={firstName}
-                onChange={handleFirstName}
+                onChange={(e) => setFirstName(e.target.value)}
                 className="form-control"
                 required
               />
@@ -46,7 +43,7 @@ const AddEmployee = () => {
                 placeholder="Enter Last Name"
                 name="lastName"
                 value={lastName}
-                onChange={handleLastName}
+                onChange={(e) => setLastName(e.target.value)}
                 className="form-control"
                 required
               />
@@ -59,7 +56,7 @@ const AddEmployee = () => {
                 placeholder="Enter Email"
                 name="email"
                 value={email}
-                onChange={handleEmail}
+                onChange={(e) => setEmail(e.target.value)}
                 className="form-control"
                 required
               />
