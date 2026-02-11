@@ -1,21 +1,42 @@
 import React, { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
+import { addEmployees } from '../services/EmployeeService';
 
 const AddEmployee = () => {
   const [firstName, setFirstName] = useState('');
   const [lastName, setLastName] = useState('');
   const [email, setEmail] = useState('');
 
+  const navigate = useNavigate();
+
+
 
   const saveEmployee = (e) => {
-    e.preventDefault(); 
+    e.preventDefault();
+
     const employee = { firstName, lastName, email };
-    console.log(employee);
-    alert(`Employee Saved: ${JSON.stringify(employee)}`);
-    // Optional: reset form
-    setFirstName('');
-    setLastName('');
-    setEmail('');
+
+    // Call backend API
+    addEmployees(employee)
+      .then((response) => {
+        console.log(response.data);
+        navigate('/'); // go back to employee list page
+      })
+      .catch((error) => {
+        console.error(error);
+      });
   };
+
+  // const saveEmployee = (e) => {
+  //   e.preventDefault();
+  //   const employee = { firstName, lastName, email };
+  //   console.log(employee);
+  //   alert(`Employee Saved: ${JSON.stringify(employee)}`);
+  //   // Optional: reset form
+  //   setFirstName('');
+  //   setLastName('');
+  //   setEmail('');
+  // };
 
   return (
     <div className="container my-5">
