@@ -12,7 +12,8 @@ function App() {
         <HeaderComponent />
         <Routes>
           <Route path = '/' element = {<ListEmployeeComponent/>} /> 
-          <Route path='/add_employee' element = {<AddEmployee />} />     
+          <Route path='/add_employee' element = {<AddEmployee />} /> 
+          <Route path='/edit_employee/:id' element = {<AddEmployee />} />
         </Routes>
         {/* Body */}
         
