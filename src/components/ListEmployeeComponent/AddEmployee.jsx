@@ -1,6 +1,6 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
-import { addEmployees } from '../services/EmployeeService';
+import { addEmployees, getEmployeeId, updateEmployee } from '../services/EmployeeService';
 
 const AddEmployee = () => {
   const [firstName, setFirstName] = useState('');
@@ -17,24 +17,50 @@ const AddEmployee = () => {
 
   const navigate = useNavigate();
 
+  useEffect(() => {
+    if (id) {
+      // Fetch employee data by id and populate form fields for editing
+      getEmployeeId(id).then((response) => {
+        setFirstName(response.data.firstName);
+        setLastName(response.data.lastName);
+        setEmail(response.data.email);
+      }).catch((error) => {
+        console.error(error);
+      })
+
+    }
+  }, [id])
 
 
-  const saveEmployee = (e) => {
+  const saveOrUpdateEmployee = (e) => {
     e.preventDefault();
 
     if (validateForm()) {
       const employee = { firstName, lastName, email };
 
-      // Call backend API
-      //from submition function 
-      addEmployees(employee)
-        .then((response) => {
+      if (id) {
+        //update employee 
+        updateEmployee(id, employee).then((response) => {
           console.log(response.data);
-          navigate('/'); // go back to employee list page
-        })
-        .catch((error) => {
+          navigate('/') // go back to employee list page 
+        }).catch((error) => {
           console.error(error);
-        });
+        })
+      } else {
+        // Call backend API
+        //from submition function 
+        addEmployees(employee)
+          .then((response) => {
+            console.log(response.data);
+            navigate('/'); // go back to employee list page
+          })
+          .catch((error) => {
+            console.error(error);
+          });
+
+      }
+
+
 
     }
 
@@ -102,7 +128,7 @@ const AddEmployee = () => {
       {pageTitle()}
       <div className="row justify-content-center">
         <div className="col-md-6">
-          <form onSubmit={saveEmployee}>
+          <form onSubmit={saveOrUpdateEmployee}>
             <div className="mb-3">
               <label className="form-label">First Name</label>
               <input

@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { listEmployees } from '../services/EmployeeService';
+import { listEmployees, deleteEmployee } from '../services/EmployeeService';
 import { useNavigate } from 'react-router-dom';
 
 const ListEmployeeComponent = () => {
@@ -28,7 +28,7 @@ const ListEmployeeComponent = () => {
   const [employees, setEmployees] = useState([]);
   const navigate = useNavigate();
 
-  useEffect(() => {
+  function getAllEmployees() {
     listEmployees()
       .then((response) => {
         setEmployees(response.data);
@@ -36,7 +36,13 @@ const ListEmployeeComponent = () => {
       .catch((error) => {
         console.error(error);
       });
+  }
+
+  useEffect(() => {
+    getAllEmployees();
   }, []);
+
+
 
   const addNewEmployee = () => {
     navigate('/add_employee');
@@ -44,6 +50,16 @@ const ListEmployeeComponent = () => {
 
   const updateEmployee = (id) => {
     navigate(`/edit_employee/${id}`)
+  }
+  const handleDeleteEmployee = (id) => {
+    // Call backend API to delete employee by id
+    console.log(`Delete employee with id: ${id}`);
+    // In a real application, you would make an API call here to delete the employee from the backend
+    deleteEmployee(id).then(() => {
+        getAllEmployees();
+    }).catch((error) => {
+      console.error(error);
+    })
   }
   return (
     <div className="container mt-4">
@@ -71,7 +87,7 @@ const ListEmployeeComponent = () => {
               <td>{employee.email}</td>
               <td>
                 <button className="btn btn-info me-2" onClick={() => updateEmployee(employee.id)}>Update</button>
-                <button className="btn btn-danger">Delete</button>
+                <button className="btn btn-danger" onClick={() => handleDeleteEmployee(employee.id)}>Delete</button>
               </td>
             </tr>
           ))}
